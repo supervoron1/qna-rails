@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_question, only: %i[create]
-  before_action :set_answer, only: %i[update destroy]
+  before_action :set_answer, only: %i[update destroy mark_as_best]
   before_action :check_owner, only: %i[update destroy]
 
   def create
@@ -18,6 +18,18 @@ class AnswersController < ApplicationController
   def destroy
     @question = @answer.question
     @answer.destroy
+  end
+
+  def mark_as_best
+    if current_user&.author_of?(@answer.question)
+      @answer.mark_as_best!
+    else
+      flash.now[:alert] = 'You must be author of main question'
+    end
+
+    question = @answer.question
+    @best_answer = question.best_answer
+    @other_answers = question.answers.where.not(id: question.best_answer_id)
   end
 
   private

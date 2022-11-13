@@ -17,7 +17,7 @@ feature 'User can see question and answers', %q{
     given(:question) { create(:question) }
 
     scenario 'user sees question and message about no answers' do
-      expect(page).to have_content "There are no any answers yet."
+      expect(page).to have_content "There are no answers yet."
     end
   end
 

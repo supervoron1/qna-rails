@@ -6,9 +6,13 @@ p Question
 
 .answers
   - if @question.answers.present?
-    = render @question.answers
+    .best-answer
+      - if @question.best_answer
+        = render 'answers/best_answer', answer: @best_answer
+    .answers-list
+      = render partial: 'answers/answer', collection: @other_answers, as: :answer
   - else
-    p There are no any answers yet.
+    .no_answers There are no answers yet.
 
 p Answer
 .answer-errors

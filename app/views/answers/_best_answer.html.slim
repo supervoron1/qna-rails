@@ -1,4 +1,4 @@
-.answer*{ data: { answer_id: answer.id } }
+.answer*{data: { answer_id: answer.id } }
   p= answer.body
   - if current_user&.author_of?(answer)
     = link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
@@ -8,6 +8,3 @@
       = f.label :body, 'Your answer'
       = f.text_area :body
       = f.submit 'Save'
-
-  - if current_user&.author_of?(answer.question)
-    = link_to 'Mark as best', mark_as_best_answer_path(answer), remote: true, class: 'mark-as-best-answer-link', data: { answer_id: answer.id }, method: :patch

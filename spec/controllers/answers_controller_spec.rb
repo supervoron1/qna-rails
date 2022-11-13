@@ -116,4 +116,40 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #best' do
+    let(:question) { create(:question) }
+    let(:answer) { create(:answer, question: question) }
+
+    before { login(user) }
+
+    context 'own question' do
+      before { question.update(user: user) }
+
+      it 'changes best answer' do
+        patch :mark_as_best, params: { id: answer.id }, format: :js
+        question.reload
+        expect(question.best_answer).to eq answer
+      end
+
+      it 're-render index view' do
+        patch :mark_as_best, params: { id: answer.id }, format: :js
+        expect(response).to render_template :mark_as_best
+      end
+    end
+
+    context 'not own question' do
+      it 'doesn\t change best answer' do
+        puts user.author_of?(question)
+        patch :mark_as_best, params: { id: answer.id }, format: :js
+        question.reload
+        expect(question.best_answer).to_not eq answer
+      end
+
+      it 're-render index view' do
+        patch :mark_as_best, params: { id: answer.id }, format: :js
+        expect(response).to render_template :mark_as_best
+      end
+    end
+  end
 end
