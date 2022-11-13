@@ -14,7 +14,7 @@ feature 'User can edit answer', %q{
   given!(:another_question) { create(:question) }
   given!(:another_answer) { create(:answer, question: another_question) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
 
     background do
       sign_in(user)
@@ -23,18 +23,25 @@ feature 'User can edit answer', %q{
     scenario 'edits his answer' do
       visit question_path(question)
       click_on 'Edit answer'
-      fill_in 'Body', with: 'text text text?'
-      click_on 'Edit'
 
-      expect(page).to have_content 'Your answer was successfully edited.'
-      expect(page).to have_content 'text text text?'
+      within '.answers' do
+        fill_in 'Your answer', with: 'text text text?'
+        click_on 'Save'
+
+        expect(page).to_not have_content(answer.body)
+        expect(page).to have_content 'text text text?'
+        expect(page).to_not have_selector 'textarea'
+      end
     end
 
     scenario "edits answer with errors" do
       visit question_path(question)
       click_on 'Edit answer'
-      fill_in 'Body', with: ''
-      click_on 'Edit'
+
+      within '.answers' do
+        fill_in 'Your answer', with: ''
+        click_on 'Save'
+      end
 
       expect(page).to have_content "Body can't be blank"
     end

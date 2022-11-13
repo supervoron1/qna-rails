@@ -1,32 +1,22 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_question, only: %i[new create]
-  before_action :set_answer, only: %i[edit update destroy]
-  before_action :check_owner, only: %i[edit update destroy]
+  before_action :set_answer, only: %i[update destroy]
+  before_action :check_owner, only: %i[update destroy]
 
   def new
     @answer = @question.answers.new
   end
 
   def create
-    @answer = current_user.answers.create(answer_params)
+    @answer = current_user.answers.new(answer_params)
     @answer.assign_attributes(question: @question)
-
-    if @answer.save
-      redirect_to @question
-    else
-      render 'questions/show'
-    end
+    @answer.save
   end
 
-  def edit; end
-
   def update
-    if @answer.update(answer_params)
-      redirect_to question_path(@answer.question), notice: 'Your answer was successfully edited.'
-    else
-      render :edit
-    end
+    @question = @answer.question
+    @answer.update(answer_params)
   end
 
   def destroy
