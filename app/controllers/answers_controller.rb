@@ -26,10 +26,6 @@ class AnswersController < ApplicationController
     else
       flash.now[:alert] = 'You must be author of main question'
     end
-
-    question = @answer.question
-    @best_answer = question.best_answer
-    @other_answers = question.answers.where.not(id: question.best_answer_id)
   end
 
   private

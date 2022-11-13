@@ -8,9 +8,9 @@ p Question
   - if @question.answers.present?
     .best-answer
       - if @question.best_answer
-        = render 'answers/best_answer', answer: @best_answer
+        = render 'answers/best_answer', answer: @question.best_answer
     .answers-list
-      = render partial: 'answers/answer', collection: @other_answers, as: :answer
+      = render partial: 'answers/answer', collection: @question.not_best_answers, as: :answer
   - else
     .no_answers There are no answers yet.
 
