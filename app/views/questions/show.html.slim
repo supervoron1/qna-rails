@@ -1,0 +1,33 @@
+= render 'shared/errors', resource: @answer
+
+h1= @question.title
+p= @question.body
+- if current_user&.author_of?(@question)
+  = link_to 'Delete question', question_path(@question), method: :delete
+  | |
+  = link_to 'Edit question', edit_question_path(@question)
+
+-if @question.answers.present?
+  table
+    thead
+      tr
+        th Answers
+      tbody
+        - @question.answers.each do |answer|
+          tr
+            td
+              = answer.body
+            td
+              - if current_user&.author_of?(answer)
+                = link_to 'Edit answer', edit_question_answer_path(answer.question, answer)
+                = link_to 'Delete answer', question_answer_path(answer.question, answer), method: :delete
+
+-else
+  p There are no any answers yet.
+
+p Answer
+= form_with model: [@question, @answer], local: true do |f|
+  = f.label :body
+  = f.text_area :body
+
+  = f.submit 'Submit answer'
