@@ -6,6 +6,7 @@
 require("jquery")
 require('cash-dom');
 require('../channels/answers');
+require('../channels/questions');
 
 import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"

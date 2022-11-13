@@ -1,9 +1,8 @@
-h1= @question.title
-p= @question.body
-- if current_user&.author_of?(@question)
-  = link_to 'Delete question', question_path(@question), method: :delete
-  | |
-  = link_to 'Edit question', edit_question_path(@question)
+.question-errors
+  = render 'shared/errors', resource: @question
+
+p Question
+= render @question
 
 .answers
   - if @question.answers.present?
