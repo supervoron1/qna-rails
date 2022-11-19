@@ -3,6 +3,8 @@ class Question < ApplicationRecord
   belongs_to :user
   belongs_to :best_answer, required: false, class_name: 'Answer', dependent: :destroy, optional: true
 
+  has_one_attached :file
+
   validates :title, :body, presence: true
 
   def not_best_answers
