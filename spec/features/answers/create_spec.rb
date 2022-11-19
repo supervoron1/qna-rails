@@ -9,7 +9,7 @@ feature 'User can answer to question', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     background do
       sign_in(user)
 
@@ -20,7 +20,10 @@ feature 'User can answer to question', %q{
       fill_in 'Body', with: 'answer answer!'
       click_on 'Submit answer'
 
-      expect(page).to have_content 'answer answer!'
+      expect(current_path).to eq question_path(question)
+      within '.answers' do
+        expect(page).to have_content 'answer answer!'
+      end
     end
 
     scenario 'answers to question with errors' do

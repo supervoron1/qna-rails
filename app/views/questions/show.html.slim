@@ -1,32 +1,24 @@
-= render 'shared/errors', resource: @answer
+.question-errors
+  = render 'shared/errors', resource: @question
 
-h1= @question.title
-p= @question.body
-- if current_user&.author_of?(@question)
-  = link_to 'Delete question', question_path(@question), method: :delete
-  | |
-  = link_to 'Edit question', edit_question_path(@question)
+p Question
+= render @question
 
--if @question.answers.present?
-  table
-    thead
-      tr
-        th Answers
-      tbody
-        - @question.answers.each do |answer|
-          tr
-            td
-              = answer.body
-            td
-              - if current_user&.author_of?(answer)
-                = link_to 'Edit answer', edit_question_answer_path(answer.question, answer)
-                = link_to 'Delete answer', question_answer_path(answer.question, answer), method: :delete
-
--else
-  p There are no any answers yet.
+.answers
+  - if @question.answers.present?
+    .best-answer
+      - if @question.best_answer
+        = render 'answers/best_answer', answer: @question.best_answer
+    .answers-list
+      = render partial: 'answers/answer', collection: @question.not_best_answers, as: :answer
+  - else
+    .no_answers There are no answers yet.
 
 p Answer
-= form_with model: [@question, @answer], local: true do |f|
+.answer-errors
+  = render 'shared/errors', resource: @answer
+
+= form_with model: [@question, @answer], class: 'new-answer', local: false do |f|
   = f.label :body
   = f.text_area :body
 
