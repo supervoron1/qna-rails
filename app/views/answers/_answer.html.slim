@@ -11,6 +11,10 @@
     = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
       = f.label :body, 'Your answer'
       = f.text_area :body
+
+      = f.label :files
+      = f.file_field :files, multiple: true
+      
       = f.submit 'Save'
 
   - if current_user&.author_of?(answer.question)
