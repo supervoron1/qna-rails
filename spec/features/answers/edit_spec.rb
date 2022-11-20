@@ -64,7 +64,7 @@ feature 'User can edit answer', %q{
     end
   end
 
-  context 'Unauthenticated user' do
+  describe 'Unauthenticated user' do
     scenario "edits answer" do
       visit question_path(question)
 

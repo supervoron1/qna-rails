@@ -32,7 +32,7 @@ feature 'User can delete question', %q{
     end
   end
 
-  context 'Unauthenticated user' do
+  describe 'Unauthenticated user' do
     scenario "deletes question" do
       visit question_path(question)
 

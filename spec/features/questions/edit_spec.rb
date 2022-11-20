@@ -57,7 +57,7 @@ feature 'User can edit question', %q{
     end
   end
 
-  context 'Unauthenticated user' do
+  describe 'Unauthenticated user' do
     scenario "edits question" do
       visit question_path(question)
 

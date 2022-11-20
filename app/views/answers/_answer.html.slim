@@ -14,7 +14,7 @@
 
       = f.label :files
       = f.file_field :files, multiple: true
-      
+
       = f.submit 'Save'
 
   - if current_user&.author_of?(answer.question)
