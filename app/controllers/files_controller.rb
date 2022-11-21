@@ -1,20 +1,23 @@
 class FilesController < ApplicationController
-  before_action :find_record
+  before_action :find_attachment
   before_action :check_owner
 
   def destroy
-    @attachment = ActiveStorage::Attachment.find(params[:id])
-    @attachment.purge if current_user.author_of?(@record)
-    redirect_to @attachment.record, notice: 'Attachment was successfully deleted'
+    @attachment.purge if current_user.author_of?(@attachment.record)
+    redirect_to @attachment.record.question, notice: 'Attachment was successfully deleted' if @attachment.record.is_a?(Answer)
+    redirect_to @attachment.record, notice: 'Attachment was successfully deleted' if @attachment.record.is_a?(Question)
   end
 
   private
 
-  def find_record
-    @record = ActiveStorage::Attachment.find(params[:id]).record
+  def find_attachment
+    @attachment = ActiveStorage::Attachment.find(params[:id])
   end
 
   def check_owner
-    redirect_to @record, alert: "You can't delete someone else's attachment" unless current_user.author_of?(@record)
+    unless current_user.author_of?(@attachment.record)
+      redirect_to @attachment.record.question, notice: 'Attachment was successfully deleted' if @attachment.record.is_a?(Answer)
+      redirect_to @attachment.record, notice: 'Attachment was successfully deleted' if @attachment.record.is_a?(Question)
+    end
   end
 end
