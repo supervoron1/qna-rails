@@ -1,11 +1,13 @@
 class FilesController < ApplicationController
   before_action :find_attachment
+  before_action :get_url
   before_action :check_owner
 
+  ENTITIES = { 'Answer': 'record.question', 'Question': 'record' }
+
   def destroy
-    @attachment.purge if current_user.author_of?(@attachment.record)
-    redirect_to @attachment.record.question, notice: 'Attachment was successfully deleted' if @attachment.record.is_a?(Answer)
-    redirect_to @attachment.record, notice: 'Attachment was successfully deleted' if @attachment.record.is_a?(Question)
+    @attachment.purge
+    redirect_to @url, notice: 'Attachment was successfully deleted'
   end
 
   private
@@ -15,9 +17,11 @@ class FilesController < ApplicationController
   end
 
   def check_owner
-    unless current_user.author_of?(@attachment.record)
-      redirect_to @attachment.record.question, notice: 'Attachment was successfully deleted' if @attachment.record.is_a?(Answer)
-      redirect_to @attachment.record, notice: 'Attachment was successfully deleted' if @attachment.record.is_a?(Question)
-    end
+    redirect_to @url, notice: "You can't delete someone else's attachment" unless current_user.author_of?(@attachment.record)
+  end
+
+  def get_url
+    @url = @attachment.record.question if @attachment.record.is_a?(Answer)
+    @url = @attachment.record if @attachment.record.is_a?(Question)
   end
 end
