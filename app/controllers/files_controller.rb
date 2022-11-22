@@ -3,8 +3,6 @@ class FilesController < ApplicationController
   before_action :get_url
   before_action :check_owner
 
-  ENTITIES = { 'Answer': 'record.question', 'Question': 'record' }
-
   def destroy
     @attachment.purge
     redirect_to @url, notice: 'Attachment was successfully deleted'
