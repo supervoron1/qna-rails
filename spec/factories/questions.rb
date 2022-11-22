@@ -13,5 +13,9 @@ FactoryBot.define do
         create_list(:answer, 3, question_id: question.id)
       end
     end
+
+    trait :with_file do
+      files {[Rack::Test::UploadedFile.new("#{Rails.root}/spec/rails_helper.rb", "text/x-ruby")]}
+    end
   end
 end
