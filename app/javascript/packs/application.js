@@ -4,7 +4,7 @@
 // that code so it'll be compiled.
 
 require("jquery")
-require('cash-dom');
+require('@nathanvda/cocoon');
 require('../channels/answers');
 require('../channels/questions');
 

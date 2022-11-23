@@ -2,11 +2,11 @@
   "name": "thinknetica-qna",
   "private": true,
   "dependencies": {
+    "@nathanvda/cocoon": "^1.2.14",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.4.3",
-    "cash-dom": "^8.1.1",
     "jquery": "^3.6.1",
     "turbolinks": "^5.2.0",
     "webpack": "4.46.0",
@@ -15,7 +15,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "expose-loader": "1.0.3",
-    "jquery": "^3.6.0",
+    "jquery": "^3.6.1",
     "webpack-dev-server": "3"
   }
 }

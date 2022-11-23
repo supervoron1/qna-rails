@@ -28,13 +28,9 @@ p Enter new answer
     = f.file_field :files, multiple: true
 
   p Add links:
-  p
-    = f.fields_for :links do |l|
-      p
-        = l.label :name, 'Link name'
-        = l.text_field :name
-      p
-        = l.label :url
-        = l.text_field :url
+  #links
+    = f.fields_for :links do |link|
+      = render 'shared/links_fields', f: link
+    = link_to_add_association 'add link', f, :links, partial: 'shared/links_fields'
 
   = f.submit 'Submit answer'

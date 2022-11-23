@@ -33,6 +33,9 @@ gem 'devise'
 gem 'wdm', '>= 0.1.0' if Gem.win_platform?
 gem 'jquery-rails'
 
+# for nested forms
+gem 'cocoon'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
