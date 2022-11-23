@@ -27,4 +27,14 @@ p Enter new answer
     = f.label :files
     = f.file_field :files, multiple: true
 
+  p Add links:
+  p
+    = f.fields_for :links do |l|
+      p
+        = l.label :name, 'Link name'
+        = l.text_field :name
+      p
+        = l.label :url
+        = l.text_field :url
+
   = f.submit 'Submit answer'
