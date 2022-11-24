@@ -3,4 +3,8 @@ class Link < ApplicationRecord
 
   validates :name, :url, presence: true
   validates :url, http_url: true
+
+  def gist?
+    self.url.start_with? 'https://gist.github.com/'
+  end
 end

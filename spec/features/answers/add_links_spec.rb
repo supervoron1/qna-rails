@@ -33,7 +33,7 @@ feature 'User can add links to answer', %q{
 
     scenario 'adds two links when gives an answer' do
       fill_in 'Url', with: gist_url
-      
+
       click_on 'add link'
 
       first(:field, 'Link name').fill_in with: 'Another Gist'
@@ -47,7 +47,7 @@ feature 'User can add links to answer', %q{
       end
     end
 
-    scenario 'adds link with incorrect URL when give an answer' do
+    scenario 'adds link with incorrect URL when gives an answer' do
       fill_in 'Url', with: 'blablaURL'
 
       click_on 'Submit answer'

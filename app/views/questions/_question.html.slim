@@ -14,6 +14,8 @@
       - @question.links.each do |link|
         li= link_to link.name, link.url
 
+  / = render 'shared/links', links: answer.links if answer.links.exists?
+
   - if current_user&.author_of?(@question)
     = link_to 'Delete question', question_path(@question), method: :delete
     | |

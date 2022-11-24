@@ -2618,6 +2618,13 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
+easy-gist-async@^0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/easy-gist-async/-/easy-gist-async-0.9.2.tgz#598d626ed9aa0bf58e8f9df566f97d98a50c0f4d"
+  integrity sha512-UyLV1B2GtqCD+qMo1cpx6/ZVqzIi+VSmb333XxYBQb/nLSFrN0gzyOyJeihAyugoJ04RiS7Lq+jUGowCLg5SpQ==
+  dependencies:
+    fetch-jsonp "^1.1.x"
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
@@ -2936,6 +2943,11 @@ faye-websocket@^0.11.3, faye-websocket@^0.11.4:
   integrity sha512-CzbClwlXAuiRQAlUyfqPgvPoNKTckTPGfwZV4ZdAhVcP2lh9KUxJg2b5GkE7XbjKQ3YJnQ9z6D9ntLAlB+tP8g==
   dependencies:
     websocket-driver ">=0.5.1"
+
+fetch-jsonp@^1.1.x:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/fetch-jsonp/-/fetch-jsonp-1.2.3.tgz#ae99a867095cb1ce5c39fac601d70d1084db122f"
+  integrity sha512-C13k1o7R9JTN1wmhKkrW5bU/00LwixXnkufQUR6Rbf4KCS0i8mycQaovt4WVbHnA2NKgi7Ryp9Whpy/CGcij6Q==
 
 figgy-pudding@^3.5.1:
   version "3.5.2"
