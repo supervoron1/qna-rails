@@ -20,16 +20,19 @@ feature 'User can add links to question', %q{
       fill_in 'Title', with: 'Test question'
       fill_in 'Body', with: 'text text text'
       fill_in 'Link name', with: 'My Gist'
-      fill_in 'Url', with: gist_url
     end
 
     scenario 'adds link when asks question' do
+      fill_in 'Url', with: gist_url
+
       click_on 'Ask'
 
       expect(page).to have_link 'My Gist', href: gist_url
     end
 
     scenario 'adds two links when asks question' do
+      fill_in 'Url', with: gist_url
+
       click_on 'add link'
 
       first(:field, 'Link name').fill_in with: 'Another Gist'
@@ -39,6 +42,14 @@ feature 'User can add links to question', %q{
 
       expect(page).to have_link 'My Gist', href: gist_url
       expect(page).to have_link 'Another Gist', href: another_gist_url
+    end
+
+    scenario 'adds link with incorrect URL' do
+      fill_in 'Url', with: 'some_gibberish_url'
+
+      click_on 'Ask'
+
+      expect(page).to have_text 'Links url is not a valid HTTP URL'
     end
   end
 
