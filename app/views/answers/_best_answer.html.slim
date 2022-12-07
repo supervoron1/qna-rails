@@ -11,4 +11,11 @@
     = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
       = f.label :body, 'Your answer'
       = f.text_area :body
+
+      = f.label :files
+      = f.file_field :files, multiple: true
+
+      #links
+        = link_to_add_association 'add link', f, :links, partial: 'shared/links_fields'
+
       = f.submit 'Save'

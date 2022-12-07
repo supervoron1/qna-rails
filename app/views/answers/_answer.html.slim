@@ -15,6 +15,9 @@
       = f.label :files
       = f.file_field :files, multiple: true
 
+      #links
+        = link_to_add_association 'add link', f, :links, partial: 'shared/links_fields'
+
       = f.submit 'Save'
 
   - if current_user&.author_of?(answer.question)

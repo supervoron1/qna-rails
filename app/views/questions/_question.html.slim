@@ -2,18 +2,7 @@
   h1= @question.title
   p= @question.body
 
-  - if @question.files.attached?
-    - @question.files.each do |file|
-      p= link_to file.filename.to_s, url_for(file)
-      - if current_user&.author_of?(@question)
-        p= link_to 'Delete attachment', file_path(file.id), method: :delete
-
-  / .links
-    p Links:
-    ul
-      - @question.links.each do |link|
-        li= link_to link.name, link.url
-
+  = render 'shared/files', resource: @question if @question.files.attached?
   = render 'shared/links', links: @question.links if @question.links.exists?
 
   - if current_user&.author_of?(@question)
@@ -30,5 +19,8 @@
 
       = f.label :files
       = f.file_field :files, multiple: true
+
+      #links
+        = link_to_add_association 'add link', f, :links, partial: 'shared/links_fields'
 
       = f.submit 'Save'
