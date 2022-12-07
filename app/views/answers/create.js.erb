@@ -4,4 +4,7 @@ $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 if ($('.no_answers')) $('.no_answers').remove();
 $('.answers').append('<%= j render @answer %>');
 $('.new-answer #answer_body').val('');
+$('.new-answer').find('input').each(function() {
+    $(this).val('');
+});
 <% end %>

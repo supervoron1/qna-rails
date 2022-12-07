@@ -1,0 +1,6 @@
+<% unless @link.persisted? %>
+$('#link-<%= @link.id %>').remove();
+<% unless @link.linkable.links.exists? %>
+$('div.links-<%= @link.linkable.id %>').remove();
+<% end %>
+<% end %>

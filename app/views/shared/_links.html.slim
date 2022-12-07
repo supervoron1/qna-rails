@@ -1,9 +1,9 @@
-.links
+div class="links-#{links.first.linkable.id}"
   p Links:
   ul
     - links.each do |link|
       - if link.gist?
-        div data-gist = "#{link.url}"
+        <script src="#{link.url}.js"></script>
       - else
         li= link_to link.name, link.url
 
