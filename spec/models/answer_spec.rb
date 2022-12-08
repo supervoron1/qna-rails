@@ -19,10 +19,12 @@ RSpec.describe Answer, type: :model do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let(:answer) { create(:answer, question: question) }
+    let!(:reward) { create(:reward, question: question) }
 
     it 'marks answer as the best for the question' do
       answer.mark_as_best!
       expect(question.best_answer).to eq answer
+      expect(question.reward.answer).to eq answer
     end
   end
 

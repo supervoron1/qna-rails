@@ -13,6 +13,7 @@ class Answer < ApplicationRecord
 
   def mark_as_best!
     question.update(best_answer: self)
+    question.reward.update(answer: self) if question.reward
   end
 
   def best?

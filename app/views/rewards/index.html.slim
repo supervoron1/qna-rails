@@ -1,0 +1,20 @@
+h1 All my rewards
+
+- if @rewards.present?
+  table
+    thead
+      tr
+        th Question
+        th Reward image
+        th Reward name
+      tbody
+        - @rewards.each do |reward|
+          tr
+            td
+              = reward.question.title
+            td
+              = image_tag(reward.image)
+            td
+              = reward.name
+- else
+  p No rewards achieved yet
