@@ -1,5 +1,5 @@
 div
-  h2 Welcome
+  h2 Welcome #{current_user&.email}
   - if user_signed_in?
     = link_to 'LogOut', destroy_user_session_path, method: :delete
     | |
