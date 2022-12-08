@@ -1,6 +1,7 @@
 class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :user
+  has_one :reward, dependent: :destroy
   has_one :question_with_best_answer, class_name: 'Question', foreign_key: :best_answer_id, dependent: :nullify
   has_many :links, dependent: :destroy, as: :linkable
 

@@ -17,5 +17,12 @@
       = render 'shared/links_fields', f: link
     = link_to_add_association 'add link', f, :links, partial: 'shared/links_fields'
 
+  = f.fields_for :reward do |r|
+    = r.label :name, 'Reward name'
+    = r.text_field :name
+
+    = r.label :image
+    = r.file_field :image, accept: 'image/png,image/gif,image/jpeg'
+
   p
     = f.submit 'Ask'

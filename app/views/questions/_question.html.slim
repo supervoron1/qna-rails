@@ -1,6 +1,10 @@
 .question
   h1= @question.title
   p= @question.body
+  - if @question.reward
+    .reward
+      p= 'Reward is'
+      = image_tag(@question.reward.image)
 
   = render 'shared/files', resource: @question if @question.files.attached?
   = render 'shared/links', links: @question.links if @question.links.exists?
