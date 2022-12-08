@@ -6,4 +6,8 @@ module FeatureHelpers
     fill_in 'Password', with: user.password
     click_on 'Log in'
   end
+
+  def log_out
+    click_on 'LogOut'
+  end
 end

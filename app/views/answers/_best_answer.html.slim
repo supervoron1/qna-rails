@@ -1,15 +1,21 @@
 .answer*{data: { answer_id: answer.id } }
   p= answer.body
+
+  = render 'shared/files', resource: answer if answer.files.attached?
+  = render 'shared/links', links: answer.links if answer.links.exists?
+
   - if current_user&.author_of?(answer)
     = link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
     = link_to 'Delete answer', answer_path(answer), remote: true, class: 'delete-answer-link', data: { answer_id: answer.id }, method: :delete
 
-    - if answer.files.attached?
-      - answer.files.each do |file|
-        p= link_to file.filename.to_s, url_for(file)
-        p= link_to 'Delete attachment', file_path(file.id), method: :delete
-
     = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
       = f.label :body, 'Your answer'
       = f.text_area :body
+
+      = f.label :files
+      = f.file_field :files, multiple: true
+
+      #links
+        = link_to_add_association 'add link', f, :links, partial: 'shared/links_fields'
+
       = f.submit 'Save'

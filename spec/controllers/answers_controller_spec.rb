@@ -104,14 +104,14 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'no own question' do
-      it "doesn't delete not the own question" do
-        answer.reload # TODO: for some reason doesn't work without it
-        expect { delete :destroy, params: { question_id: answer.question, id: answer } }.to_not change(Answer, :count)
+    context 'not own question' do
+      it "doesn't delete not own question" do
+        answer.reload
+        expect { delete :destroy, params: { question_id: answer.question, id: answer }, format: :js }.to_not change(Answer, :count)
       end
 
       it 'redirects to question' do
-        delete :destroy, params: { question_id: answer.question, id: answer }
+        delete :destroy, params: { question_id: answer.question, id: answer }, format: :js
         expect(response).to redirect_to question_path(answer.question)
       end
     end

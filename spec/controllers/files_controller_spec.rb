@@ -26,7 +26,7 @@ RSpec.describe FilesController, type: :controller do
 
       it 'redirects to question' do
         delete :destroy, params: { id: question.files[0].id }
-        expect(response).to redirect_to question_path(question)
+        expect(response).to redirect_to question
       end
     end
   end

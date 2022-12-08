@@ -1,6 +1,11 @@
 div
+  h2 Welcome #{current_user&.email}
   - if user_signed_in?
-    p= link_to 'LogOut', destroy_user_session_path, method: :delete
+    = link_to 'LogOut', destroy_user_session_path, method: :delete
+    | |
+    = link_to 'Questions', questions_path
+    | |
+    = link_to 'Rewards', rewards_path
   - else
     = link_to 'Registration', new_user_registration_path
     | |

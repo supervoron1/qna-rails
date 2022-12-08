@@ -6,7 +6,7 @@ class AnswersController < ApplicationController
 
   def create
     @answer = current_user.answers.new(answer_params)
-    @answer.assign_attributes(question: @question)
+    @answer.question = @question
     @answer.save
   end
 
@@ -35,7 +35,7 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, files: [])
+    params.require(:answer).permit(:body, files: [], links_attributes: [:name, :url, :_destroy, :id])
   end
 
   def set_answer
