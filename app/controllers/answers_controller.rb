@@ -4,10 +4,26 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: %i[update destroy mark_as_best]
   before_action :check_owner, only: %i[update destroy]
 
+  include Voted
+
   def create
     @answer = current_user.answers.new(answer_params)
     @answer.question = @question
-    @answer.save
+
+    respond_to do |format|
+      if @answer.save
+        format.json do
+          render json: [answer: @answer,
+                        links: @answer.links,
+                        files: @answer.files.collect { |f| f.filename.to_s }]
+        end
+      else
+        format.json do
+          render json: @answer.errors.full_messages,
+                 status: :unprocessable_entity
+        end
+      end
+    end
   end
 
   def update

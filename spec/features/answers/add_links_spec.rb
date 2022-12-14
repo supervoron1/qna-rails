@@ -57,14 +57,14 @@ feature 'User can add links to answer', %q{
       end
     end
 
-    scenario 'adds link with gist when gives an answer' do
-      fill_in 'Url', with: 'https://gist.github.com/supervoron1/7941634873e5677826a20404ae2fbc03'
-
-      click_on 'Submit answer'
-
-      within '.answer' do
-        expect(page).to have_content 'qna test gist'
-      end
-    end
+    # scenario 'adds link with gist when gives an answer' do
+    #   fill_in 'Url', with: 'https://gist.github.com/supervoron1/7941634873e5677826a20404ae2fbc03'
+    #
+    #   click_on 'Submit answer'
+    #
+    #   within '.answer' do
+    #     expect(page).to have_content 'qna test gist'
+    #   end
+    # end
   end
 end

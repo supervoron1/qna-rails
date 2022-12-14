@@ -3,6 +3,7 @@
 
   = render 'shared/links', links: answer.links if answer.links.exists?
   = render 'shared/files', resource: answer if answer.files.attached?
+  = render 'shared/votes', votable: answer
 
   - if current_user&.author_of?(answer)
     = link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id }

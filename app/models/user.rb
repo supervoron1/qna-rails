@@ -14,4 +14,12 @@ class User < ApplicationRecord
   def rewards
     Reward.where(answer_id: answers)
   end
+
+  def able_to_vote?(votable)
+    !author_of?(votable) && !votable.votes.exists?(user_id: id)
+  end
+
+  def able_to_cancel_vote?(votable)
+    !author_of?(votable) && votable.votes.pluck(:user_id).include?(id)
+  end
 end

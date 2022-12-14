@@ -1,0 +1,10 @@
+div class="votes-#{votable.id}"
+  p class='votes' Votes: #{votable.rating || 0}
+  - if user_signed_in?
+    .vote
+      = link_to 'Like', polymorphic_path(votable, action: :like), method: :post, remote: true,
+              data: { type: :json }, class: (current_user&.able_to_vote?(votable) ? 'like-button' : 'like-button hidden')
+      = link_to 'Dislike', polymorphic_path(votable, action: :dislike), method: :post, remote: true,
+              data: { type: :json }, class: (current_user&.able_to_vote?(votable) ? 'dislike-button' : 'dislike-button hidden')
+      = link_to 'Cancel', polymorphic_path(votable, action: :cancel), method: :delete, remote: true,
+              data: { type: :json }, class: (current_user&.able_to_cancel_vote?(votable) ? 'cancel-button' : 'cancel-button hidden')

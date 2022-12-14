@@ -18,7 +18,7 @@ p Enter new answer
 .answer-errors
   = render 'shared/errors', resource: @answer
 
-= form_with model: [@question, @answer], class: 'new-answer', local: false do |f|
+= form_with model: [@question, @answer], class: 'new-answer', local: false, data: { type: :json } do |f|
   p
     = f.label :body
     = f.text_area :body
