@@ -59,18 +59,18 @@ feature 'User can edit answer', %q{
       expect(page).to have_link 'Google', href: 'https://google.com'
     end
 
-    scenario 'edits his answer and adds new link with gist' do
-      click_on 'Edit answer'
-
-      within "#edit-answer-#{answer.id}" do
-        click_on 'add link'
-        fill_in 'Link name', with: 'Gist'
-        fill_in 'Url', with: 'https://gist.github.com/supervoron1/7941634873e5677826a20404ae2fbc03'
-        click_on 'Save'
-      end
-
-      expect(page).to have_content 'qna test gist'
-    end
+    # scenario 'edits his answer and adds new link with gist' do
+    #   click_on 'Edit answer'
+    #
+    #   within "#edit-answer-#{answer.id}" do
+    #     click_on 'add link'
+    #     fill_in 'Link name', with: 'Gist'
+    #     fill_in 'Url', with: 'https://gist.github.com/supervoron1/7941634873e5677826a20404ae2fbc03'
+    #     click_on 'Save'
+    #   end
+    #
+    #   expect(page).to have_content 'qna test gist'
+    # end
 
     scenario "edits answer with errors" do
       click_on 'Edit answer'

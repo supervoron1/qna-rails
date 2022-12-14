@@ -7,17 +7,17 @@ module Voted
   end
 
   def like
-    @vote = @votable.votes.build(value: 1, user: current_user)
+    vote = @votable.votes.build(value: 1, user: current_user)
 
     respond_to do |format|
-      if current_user.able_to_vote?(@votable) && @vote.save
+      if current_user.able_to_vote?(@votable) && vote.save
         format.json do
-          render json: [rating: @votable.votes.sum(:value),
+          render json: [rating: @votable.rating,
                         id: @votable.id]
         end
       else
         format.json do
-          render json: @vote.errors.full_messages,
+          render json: vote.errors.full_messages,
                  status: :unprocessable_entity
         end
       end
@@ -25,17 +25,17 @@ module Voted
   end
 
   def dislike
-    @vote = @votable.votes.build(value: -1, user: current_user)
+    vote = @votable.votes.build(value: -1, user: current_user)
 
     respond_to do |format|
-      if current_user.able_to_vote?(@votable) && @vote.save
+      if current_user.able_to_vote?(@votable) && vote.save
         format.json do
-          render json: [rating: @votable.votes.sum(:value),
+          render json: [rating: @votable.rating,
                         id: @votable.id]
         end
       else
         format.json do
-          render json: @vote.errors.full_messages,
+          render json: vote.errors.full_messages,
                  status: :unprocessable_entity
         end
       end
@@ -57,7 +57,7 @@ module Voted
     respond_to do |format|
       if current_user.able_to_cancel_vote?(@votable) && vote.destroy
         format.json do
-          render json: [rating: @votable.votes.sum(:value),
+          render json: [rating: @votable.rating,
                         id: @votable.id]
         end
       else
