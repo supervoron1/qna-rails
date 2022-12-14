@@ -2,12 +2,13 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :authenticate_user!
     before_action :set_votable, only: %i[like dislike cancel]
   end
 
   def like
     vote = @votable.votes.build(value: 1, user: current_user)
+
+    return head :forbidden unless current_user.able_to_vote?(@votable)
 
     respond_to do |format|
       if current_user.able_to_vote?(@votable) && vote.save

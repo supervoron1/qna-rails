@@ -16,7 +16,7 @@ class User < ApplicationRecord
   end
 
   def able_to_vote?(votable)
-    !author_of?(votable) && votable.votes.pluck(:user_id).exclude?(id)
+    !author_of?(votable) && !votable.votes.exists?(user_id: id)
   end
 
   def able_to_cancel_vote?(votable)

@@ -58,27 +58,6 @@ shared_examples_for 'voted' do
     end
   end
 
-  describe 'POST #dislike' do
-    before { login(user) }
-
-    context 'by not votable user' do
-      it 'saves vote to the database' do
-        expect { post :dislike, params: { id: votable }, format: :json }.to change(votable.votes, :count).by(1)
-      end
-
-      it 'saves vote with value equal 1' do
-        post :dislike, params: { id: votable }, format: :json
-        expect(votable.votes.first.value).to eq(-1)
-      end
-    end
-
-    context 'by already votable user' do
-      it 'doesnt save vote to the database' do
-        expect { post :dislike, params: { id: voted_votable }, format: :json }.to_not change(votable.votes, :count)
-      end
-    end
-  end
-
   describe 'DELETE #cancel' do
     before { login(user) }
 

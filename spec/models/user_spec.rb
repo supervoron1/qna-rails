@@ -7,7 +7,7 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
 
-  context 'verification of user authorship' do
+  describe 'verification of user authorship' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let(:answer) { create(:answer) }
@@ -21,7 +21,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context 'verification of user rewards' do
+  describe 'verification of user rewards' do
     let(:user) { create(:user) }
     let(:answer) { create(:answer, user: user) }
     let(:rewards) { create_list(:reward, 3, answer: answer) }
@@ -31,7 +31,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context 'verification of user voting ability' do
+  describe 'verification of user voting ability' do
     let(:user) { create(:user) }
     let(:question) { create(:question) }
     let(:voted_answer) { create(:answer) }
