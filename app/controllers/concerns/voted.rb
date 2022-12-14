@@ -15,6 +15,11 @@ module Voted
           render json: [rating: @votable.votes.sum(:value),
                         id: @votable.id]
         end
+      else
+        format.json do
+          render json: @vote.errors.full_messages,
+                 status: :unprocessable_entity
+        end
       end
     end
   end
@@ -28,6 +33,11 @@ module Voted
           render json: [rating: @votable.votes.sum(:value),
                         id: @votable.id]
         end
+      else
+        format.json do
+          render json: @vote.errors.full_messages,
+                 status: :unprocessable_entity
+        end
       end
     end
   end
@@ -35,11 +45,25 @@ module Voted
   def cancel
     vote = @votable.votes.find_by(user: current_user)
 
+    if vote.nil?
+      respond_to do |format|
+        format.json do
+          render json: 'Not found',
+                 status: :not_found
+        end
+      end and return
+    end
+
     respond_to do |format|
       if current_user.able_to_cancel_vote?(@votable) && vote.destroy
         format.json do
           render json: [rating: @votable.votes.sum(:value),
                         id: @votable.id]
+        end
+      else
+        format.json do
+          render json: vote.errors.full_messages,
+                 status: :unprocessable_entity
         end
       end
     end
