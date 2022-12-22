@@ -1,14 +1,14 @@
 import consumer from "./consumer";
 
-$(document).on('turbolinks:load', function () {
-    $('.answers').on('click', '.edit-answer-link', function (e) {
+$(document).on('turbolinks:load', function(){
+    $('.answers').on('click', '.edit-answer-link', function(e) {
         e.preventDefault();
         $(this).hide();
         var answerId = $(this).data('answerId');
         $('form#edit-answer-' + answerId).removeClass('hidden');
     });
 
-    $('form.new-answer').on('ajax:success', function (e) {
+    $('form.new-answer').on('ajax:success', function(e) {
         var answer = e.detail[0][0].answer;
 
         if ($('.no_answers').length) {
@@ -21,7 +21,7 @@ $(document).on('turbolinks:load', function () {
         document.querySelector('.new-answer #answer_body').value = ''
         document.querySelector('.answer-errors').innerHTML = ''
 
-        $('.new-answer').find('input').each(function () {
+        $('.new-answer').find('input').each(function() {
             $(this).val('');
         });
 
@@ -50,11 +50,12 @@ $(document).on('turbolinks:load', function () {
             $('<div class="links-' + answer.id + '"><ul>').append('</ul>');
         }
     })
-        .on('ajax:error', function (e) {
+        .on('ajax:error', function(e) {
             $('.answer-errors').empty();
 
             var errors = e.detail[0];
-            $.each(errors, function (index, value) {
+
+            $.each(errors, function(index, value) {
                 $('.answer-errors').append('<p>' + value + '</p>')
             });
         })
@@ -65,7 +66,6 @@ $(document).on('turbolinks:load', function () {
         },
 
         received(data) {
-            console.log(data)
             if ($('.no_answers').length) {
                 $('.no_answers').remove()
 
