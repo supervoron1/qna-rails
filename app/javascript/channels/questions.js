@@ -10,7 +10,7 @@ $(document).on('turbolinks:load', function(){
 
     consumer.subscriptions.create('QuestionsChannel', {
         connected() {
-            console.log('Connected successfully!!!')
+            // console.log('Connected successfully!!!')
             this.perform('follow');
         },
 

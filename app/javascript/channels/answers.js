@@ -72,7 +72,9 @@ $(document).on('turbolinks:load', function () {
                 $('.answers').append('<div class="answers-list">');
             }
 
-            $('.answers-list').append(data)
+            if(gon.user_id !== data.user_id) {
+                $('.answers-list').append('<p>' + data.answer + '</p>');
+            }
         }
     })
 });

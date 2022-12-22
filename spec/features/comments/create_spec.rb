@@ -8,7 +8,7 @@ feature 'User can comment question/answer', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  given(:answer) { create(:answer, question: question) }
+  given!(:answer) { create(:answer, question: question) }
 
   describe 'Authenticated user', js: true do
     background do
@@ -19,9 +19,9 @@ feature 'User can comment question/answer', %q{
 
     scenario 'comments to question' do
       within '.question' do
-        click_on 'Comment'
-        fill_in 'Comment body', with: 'simple comment'
-        click_on 'Submit comment'
+        click_on 'Add comment'
+        fill_in 'Your comment', with: 'simple comment'
+        click_on 'Save comment'
 
         expect(page).to have_content 'simple comment'
       end
@@ -29,51 +29,53 @@ feature 'User can comment question/answer', %q{
 
     scenario 'comments to answer' do
       within '.answer' do
-        click_on 'Comment'
-        fill_in 'Comment body', with: 'simple comment'
-        click_on 'Submit comment'
+        click_on 'Add comment'
+        fill_in 'Your comment', with: 'simple comment'
+        click_on 'Save comment'
 
         expect(page).to have_content 'simple comment'
       end
     end
 
     scenario 'comments to question with errors' do
-      click_on 'Comment'
-      fill_in 'Comment body', with: ''
-      click_on 'Submit comment'
+      within '.question' do
+        click_on 'Add comment'
+        fill_in 'Your comment', with: ''
+        click_on 'Save comment'
 
-      expect(page).to have_content "Body can't be blank"
-    end
-
-    describe 'Unauthenticated user' do
-      scenario 'tries to answer to question' do
-        visit question_path(question)
-        expect(page).to_not have_link 'Comment'
+        expect(page).to have_content "Body can't be blank"
       end
     end
+  end
 
-    describe 'With multiple sessions', js: true do
-      scenario 'comment appears on another users pages' do
-        Capybara.using_session('guest') do
-          visit question_path(question)
+  describe 'Unauthenticated user' do
+    scenario 'tries to answer to question' do
+      visit question_path(question)
+      expect(page).to_not have_link 'Comment'
+    end
+  end
+
+  describe 'With multiple sessions', js: true do
+    scenario 'comment appears on another users pages' do
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+
+        within '.question' do
+          click_on 'Add comment'
+          fill_in 'Your comment', with: 'simple comment'
+          click_on 'Save comment'
+
+          expect(page).to have_content 'simple comment'
         end
+      end
 
-        Capybara.using_session('user') do
-          sign_in(user)
-          visit question_path(question)
-
-          within '.question' do
-            click_on 'Comment'
-            fill_in 'Comment body', with: 'simple comment'
-            click_on 'Submit comment'
-
-            expect(page).to have_content 'simple comment'
-          end
-        end
-
-        Capybara.using_session('guest') do
-          expect(page).to have_content('simple comment')
-        end
+      Capybara.using_session('guest') do
+        expect(page).to have_content('simple comment')
       end
     end
   end

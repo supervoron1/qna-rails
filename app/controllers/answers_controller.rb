@@ -7,6 +7,7 @@ class AnswersController < ApplicationController
   after_action :publish_answer, only: %i[create]
 
   include Voted
+  include Commented
 
   def create
     @answer = current_user.answers.new(answer_params)
@@ -67,6 +68,6 @@ class AnswersController < ApplicationController
   def publish_answer
     return if @answer.errors.any?
 
-    ActionCable.server.broadcast 'answers', ApplicationController.render(json: @answer)
+    ActionCable.server.broadcast 'answers', answer: @answer.body, user_id: @answer.user_id
   end
 end

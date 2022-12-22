@@ -6,6 +6,7 @@ class QuestionsController < ApplicationController
   after_action :publish_question, only: %i[create]
 
   include Voted
+  include Commented
 
   def index
     @questions = Question.all
@@ -66,7 +67,7 @@ class QuestionsController < ApplicationController
       ApplicationController.render(
         # partial: 'questions/question',
         # locals: { question: @question },
-        json: @question
+        json: @question.title
       )
     )
 
