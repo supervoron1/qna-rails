@@ -1,5 +1,5 @@
 - if @questions.present?
-  table
+  table class='questions-list'
     thead
       tr
         th Question title
@@ -12,6 +12,6 @@
             td
               = link_to 'Show', question_path(question)
 - else
-  p There are no any questions. Let's create first
+  .no_questions There are no any questions. Let's create first
 
 p= link_to 'Ask question', new_question_path
