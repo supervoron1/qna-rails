@@ -1,3 +1,5 @@
+import consumer from "./consumer";
+
 $(document).on('turbolinks:load', function () {
     $('.answers').on('click', '.edit-answer-link', function (e) {
         e.preventDefault();
@@ -19,7 +21,7 @@ $(document).on('turbolinks:load', function () {
         document.querySelector('.new-answer #answer_body').value = ''
         document.querySelector('.answer-errors').innerHTML = ''
 
-        $('.new-answer').find('input').each(function() {
+        $('.new-answer').find('input').each(function () {
             $(this).val('');
         });
 
@@ -56,4 +58,21 @@ $(document).on('turbolinks:load', function () {
                 $('.answer-errors').append('<p>' + value + '</p>')
             });
         })
+
+    consumer.subscriptions.create('AnswersChannel', {
+        connected() {
+            this.perform('follow');
+        },
+
+        received(data) {
+            console.log(data)
+            if ($('.no_answers').length) {
+                $('.no_answers').remove()
+
+                $('.answers').append('<div class="answers-list">');
+            }
+
+            $('.answers-list').append(data)
+        }
+    })
 });
