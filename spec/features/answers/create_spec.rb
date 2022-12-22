@@ -69,7 +69,9 @@ feature 'User can answer to question', %q{
       end
 
       Capybara.using_session('guest') do
-        expect(page).to have_content('answer answer!')
+        within '.answers-list' do
+          expect(page).to have_content('answer answer!')
+        end
       end
     end
   end
