@@ -2,10 +2,11 @@
   = render 'shared/errors', resource: @question
 
 p Question
-= render @question
+= render @question, question: @question
 
 .answers
   - if @question.answers.present?
+    p Best answer:
     .best-answer
       - if @question.best_answer
         = render @question.best_answer

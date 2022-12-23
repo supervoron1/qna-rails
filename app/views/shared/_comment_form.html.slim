@@ -1,0 +1,9 @@
+- if current_user
+  = link_to 'Add comment', @comment, class: 'new-comment', data: { commentable_id: commentable.id }
+
+  = form_with scope: :comment, url: polymorphic_path(commentable, action: 'comment'), class: 'hidden',
+          html: { id: "new-comment-#{commentable.id}" }, local: false, data: { type: :json } do |f|
+    = f.label :body, 'Your comment'
+    = f.text_area :body
+
+    = f.submit 'Save comment', class: 'btn btn-info btn-sm'

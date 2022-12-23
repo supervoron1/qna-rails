@@ -8,6 +8,7 @@ require('@nathanvda/cocoon');
 require('../channels/answers');
 require('../channels/questions');
 require('../channels/votes');
+require('../channels/comments');
 require('../utilities/gist_loader');
 
 import Rails from "@rails/ujs"

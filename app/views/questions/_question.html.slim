@@ -1,21 +1,23 @@
 .question
-  h1= @question.title
-  p= @question.body
-  - if @question.reward
+  h1= question.title
+  p= question.body
+  - if question.reward
     .reward
       p= 'Reward is'
-      = image_tag(@question.reward.image)
+      = image_tag(question.reward.image)
 
-  = render 'shared/files', resource: @question if @question.files.attached?
-  = render 'shared/links', links: @question.links if @question.links.exists?
-  = render 'shared/votes', votable: @question
+  = render 'shared/files', resource: question if question.files.attached?
+  = render 'shared/links', links: question.links if question.links.exists?
+  = render 'shared/votes', votable: question
+  = render 'shared/comments', commentable: question
+  = render 'shared/comment_form', commentable: question
 
-  - if current_user&.author_of?(@question)
-    = link_to 'Delete question', question_path(@question), method: :delete
+  - if current_user&.author_of?(question)
+    = link_to 'Delete question', question_path(question), method: :delete
     | |
-    = link_to 'Edit question', '#', class: 'edit-question-link', data: { question_id: @question.id }
+    = link_to 'Edit question', '#', class: 'edit-question-link', data: { question_id: question.id }
 
-    = form_with model: @question, local: false, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
+    = form_with model: question, local: false, class: 'hidden', html: { id: "edit-question-#{question.id}" } do |f|
       = f.label :title
       = f.text_field :title
 
