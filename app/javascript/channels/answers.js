@@ -1,12 +1,14 @@
-$(document).on('turbolinks:load', function () {
-    $('.answers').on('click', '.edit-answer-link', function (e) {
+import consumer from "./consumer";
+
+$(document).on('turbolinks:load', function(){
+    $('.answers').on('click', '.edit-answer-link', function(e) {
         e.preventDefault();
         $(this).hide();
         var answerId = $(this).data('answerId');
         $('form#edit-answer-' + answerId).removeClass('hidden');
     });
 
-    $('form.new-answer').on('ajax:success', function (e) {
+    $('form.new-answer').on('ajax:success', function(e) {
         var answer = e.detail[0][0].answer;
 
         if ($('.no_answers').length) {
@@ -48,12 +50,33 @@ $(document).on('turbolinks:load', function () {
             $('<div class="links-' + answer.id + '"><ul>').append('</ul>');
         }
     })
-        .on('ajax:error', function (e) {
+        .on('ajax:error', function(e) {
             $('.answer-errors').empty();
 
             var errors = e.detail[0];
-            $.each(errors, function (index, value) {
+
+            $.each(errors, function(index, value) {
                 $('.answer-errors').append('<p>' + value + '</p>')
             });
         })
+
+    // consumer.subscriptions.create({ channel: "AnswersChannel", question_id: question_id }, {
+    consumer.subscriptions.create('AnswersChannel', {
+        connected() {
+            this.perform('follow');
+            // console.log('Connected to the answers channel of question-'+ question_id)
+        },
+
+        received(data) {
+            if ($('.no_answers').length) {
+                $('.no_answers').remove()
+
+                $('.answers').append('<div class="answers-list">');
+            }
+
+            if(gon.user_id !== data.user_id) {
+                $('.answers-list').append('<p>' + data.answer + '</p>');
+            }
+        }
+    })
 });

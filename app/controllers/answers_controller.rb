@@ -4,7 +4,10 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: %i[update destroy mark_as_best]
   before_action :check_owner, only: %i[update destroy]
 
+  after_action :publish_answer, only: %i[create]
+
   include Voted
+  include Commented
 
   def create
     @answer = current_user.answers.new(answer_params)
@@ -60,5 +63,12 @@ class AnswersController < ApplicationController
 
   def check_owner
     redirect_to question_path(@answer.question), alert: "You can't edit/delete someone else's answer" unless current_user.author_of?(@answer)
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    ActionCable.server.broadcast 'answers', answer: @answer.body, user_id: @answer.user_id
+    # ActionCable.server.broadcast "answers/#{@answer.question_id}", answer: @answer.body, user_id: @answer.user_id
   end
 end

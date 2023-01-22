@@ -1,0 +1,6 @@
+div class="comments-#{commentable.id}"
+  ul
+    - commentable.comments.each do |comment|
+      li =comment.body
+
+  .comments-errors
