@@ -69,5 +69,6 @@ class AnswersController < ApplicationController
     return if @answer.errors.any?
 
     ActionCable.server.broadcast 'answers', answer: @answer.body, user_id: @answer.user_id
+    # ActionCable.server.broadcast "answers/#{@answer.question_id}", answer: @answer.body, user_id: @answer.user_id
   end
 end

@@ -60,9 +60,11 @@ $(document).on('turbolinks:load', function(){
             });
         })
 
+    // consumer.subscriptions.create({ channel: "AnswersChannel", question_id: question_id }, {
     consumer.subscriptions.create('AnswersChannel', {
         connected() {
             this.perform('follow');
+            // console.log('Connected to the answers channel of question-'+ question_id)
         },
 
         received(data) {
