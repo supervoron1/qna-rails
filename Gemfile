@@ -41,7 +41,6 @@ gem 'cocoon'
 gem 'gon', '~> 6.1'
 
 # for authorization
-gem 'cancancan'
 gem 'pundit'
 gem "omniauth-rails_csrf_protection"
 
