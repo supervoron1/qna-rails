@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_question, only: %i[create]
   before_action :set_answer, only: %i[update destroy mark_as_best]
-  before_action :check_owner, only: %i[update destroy]
+  before_action :authorize_answer, only: %i[update destroy mark_as_best]
 
   after_action :publish_answer, only: %i[create]
 
@@ -12,6 +12,8 @@ class AnswersController < ApplicationController
   def create
     @answer = current_user.answers.new(answer_params)
     @answer.question = @question
+
+    authorize_answer
 
     respond_to do |format|
       if @answer.save
@@ -30,6 +32,7 @@ class AnswersController < ApplicationController
   end
 
   def update
+    authorize @answer
     @question = @answer.question
     @answer.update(answer_params)
   end
@@ -40,11 +43,7 @@ class AnswersController < ApplicationController
   end
 
   def mark_as_best
-    if current_user&.author_of?(@answer.question)
-      @answer.mark_as_best!
-    else
-      flash.now[:alert] = 'You must be author of main question'
-    end
+    @answer.mark_as_best!
   end
 
   private
@@ -61,14 +60,14 @@ class AnswersController < ApplicationController
     @answer = Answer.with_attached_files.find(params[:id])
   end
 
-  def check_owner
-    redirect_to question_path(@answer.question), alert: "You can't edit/delete someone else's answer" unless current_user.author_of?(@answer)
-  end
-
   def publish_answer
     return if @answer.errors.any?
 
     ActionCable.server.broadcast 'answers', answer: @answer.body, user_id: @answer.user_id
     # ActionCable.server.broadcast "answers/#{@answer.question_id}", answer: @answer.body, user_id: @answer.user_id
+  end
+
+  def authorize_answer
+    authorize @answer
   end
 end

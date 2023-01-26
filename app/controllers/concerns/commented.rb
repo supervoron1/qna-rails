@@ -12,6 +12,8 @@ module Commented
     @comment = @commentable.comments.new(commentable_params)
     @comment.user = current_user
 
+    authorize @commentable
+
     respond_to do |format|
       if @comment.save
         format.json do

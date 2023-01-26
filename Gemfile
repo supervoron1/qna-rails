@@ -40,6 +40,8 @@ gem 'cocoon'
 # for sending data to js files
 gem 'gon', '~> 6.1'
 
+# for authorization
+gem 'pundit'
 gem "omniauth-rails_csrf_protection"
 
 # For github auth

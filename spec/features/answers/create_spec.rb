@@ -48,10 +48,9 @@ feature 'User can answer to question', %q{
   describe 'Unauthenticated user' do
     scenario 'tries to answer to question' do
       visit question_path(question)
-      fill_in 'Body', with: 'answer'
-      click_on 'Submit answer'
 
-      expect(page).to have_content 'You need to sign in or sign up before continuing.'
+      expect(page).to_not have_content 'Body'
+      expect(page).to_not have_content 'Submit answer'
     end
   end
 

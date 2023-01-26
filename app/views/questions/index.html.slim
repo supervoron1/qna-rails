@@ -14,4 +14,5 @@
 - else
   .no_questions There are no any questions. Let's create first
 
-p= link_to 'Ask question', new_question_path
+- if policy(Question).new?
+  p= link_to 'Ask question', new_question_path

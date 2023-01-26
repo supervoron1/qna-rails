@@ -4,7 +4,7 @@
   = render 'shared/files', resource: answer if answer.files.attached?
   = render 'shared/links', links: answer.links if answer.links.exists?
 
-  - if current_user&.author_of?(answer)
+  - if policy(answer).update?
     = link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
     = link_to 'Delete answer', answer_path(answer), remote: true, class: 'delete-answer-link', data: { answer_id: answer.id }, method: :delete
 

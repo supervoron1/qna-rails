@@ -2,8 +2,8 @@ class QuestionsController < ApplicationController
   include Commented
 
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: %i[show edit update destroy]
-  before_action :check_owner, only: %i[edit update destroy]
+  before_action :load_question, only: %i[show update destroy]
+  before_action :authorize_question, only: %i[show update destroy]
 
   after_action :publish_question, only: %i[create]
 
@@ -11,6 +11,8 @@ class QuestionsController < ApplicationController
 
   def index
     @questions = Question.all
+
+    authorize @questions
   end
 
   def show
@@ -20,12 +22,14 @@ class QuestionsController < ApplicationController
 
   def new
     @question = Question.new
+
     @question.links.new
     @question.build_reward
   end
 
   def create
     @question = current_user.questions.create(question_params)
+    authorize @question
 
     if @question.save
       redirect_to @question, notice: 'Your question successfully created.'
@@ -49,10 +53,6 @@ class QuestionsController < ApplicationController
     @question = Question.with_attached_files.find(params[:id])
   end
 
-  def check_owner
-    redirect_to question_path(@question), alert: "You can't edit/delete someone else's question" unless current_user.author_of?(@question)
-  end
-
   def question_params
     params.require(:question).permit(:title, :body,
                                      files: [],
@@ -69,6 +69,9 @@ class QuestionsController < ApplicationController
                                     # locals: { question: @question },
                                     json: @question.title
                                  )
+  end
 
+  def authorize_question
+    authorize @question
   end
 end

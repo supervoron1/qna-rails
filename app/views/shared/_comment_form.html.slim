@@ -1,4 +1,4 @@
-- if current_user
+- if policy(commentable).comment?
   = link_to 'Add comment', @comment, class: 'new-comment', data: { commentable_id: commentable.id }
 
   = form_with scope: :comment, url: polymorphic_path(commentable, action: 'comment'), class: 'hidden',
