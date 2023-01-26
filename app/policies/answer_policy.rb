@@ -20,4 +20,16 @@ class AnswerPolicy < ApplicationPolicy
   def mark_as_best?
     user&.author_of?(record.question)
   end
+
+  def like?
+    user.present? && !user.author_of?(record) && record.votes.pluck(:user_id).exclude?(user.id)
+  end
+
+  def dislike?
+    user.present? && !user.author_of?(record) && record.votes.pluck(:user_id).exclude?(user.id)
+  end
+
+  def cancel?
+    user.present? && !user.author_of?(record) && record.votes.pluck(:user_id).include?(user.id)
+  end
 end

@@ -138,8 +138,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq 'Question_body'
       end
 
-      it 're-renders edit view' do
-        expect(response).to redirect_to question_path(question)
+      it 'redirects to root' do
+        expect(response).to redirect_to root_path
       end
     end
   end
@@ -166,9 +166,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
       end
 
-      it 'redirects to question' do
+      it 'redirects to root' do
         delete :destroy, params: { id: question }
-        expect(response).to redirect_to question_path(question)
+        expect(response).to redirect_to root_path
       end
     end
   end

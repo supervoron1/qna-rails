@@ -28,4 +28,16 @@ class QuestionPolicy < ApplicationPolicy
   def destroy?
     user&.admin? || user&.author_of?(record)
   end
+
+  def like?
+    user.present? && !user.author_of?(record) && record.votes.pluck(:user_id).exclude?(user.id)
+  end
+
+  def dislike?
+    user.present? && !user.author_of?(record) && record.votes.pluck(:user_id).exclude?(user.id)
+  end
+
+  def cancel?
+    user.present? && !user.author_of?(record) && record.votes.pluck(:user_id).include?(user.id)
+  end
 end

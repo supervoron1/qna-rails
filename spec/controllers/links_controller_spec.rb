@@ -24,7 +24,7 @@ RSpec.describe LinksController, type: :controller do
 
       it 'redirects to question' do
         delete :destroy, params: { id: link.id }, format: :js
-        expect(response).to redirect_to question
+        expect(response).to have_http_status :forbidden
       end
     end
   end
