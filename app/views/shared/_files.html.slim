@@ -5,5 +5,5 @@ ul
     li id="file-#{file.id}"
       = link_to file.filename.to_s, url_for(file)
 
-      - if current_user&.author_of?(resource)
+      - if policy(resource).destroy?
         = link_to 'Delete attachment', file_path(file.id), method: :delete
