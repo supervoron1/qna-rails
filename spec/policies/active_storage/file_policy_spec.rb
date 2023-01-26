@@ -9,7 +9,7 @@ RSpec.describe ActiveStorage::AttachmentPolicy, type: :policy do
   permissions :destroy? do
     it 'grants access if user is admin' do
 
-      expect(subject).to permit(User.new(admin:true), file)
+      expect(subject).to permit(User.new(admin: true), file)
     end
 
     it 'grants access if user is author of parent resource' do

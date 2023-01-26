@@ -19,19 +19,20 @@ p Enter new answer
 .answer-errors
   = render 'shared/errors', resource: @answer
 
-= form_with model: [@question, @answer], class: 'new-answer', local: false, data: { type: :json } do |f|
-  p
-    = f.label :body
-    = f.text_area :body
+- if policy(Answer).new?
+  = form_with model: [@question, @answer], class: 'new-answer', local: false, data: { type: :json } do |f|
+    p
+      = f.label :body
+      = f.text_area :body
 
-  p
-    = f.label :files
-    = f.file_field :files, multiple: true
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true
 
-  p Add links:
-  #links
-    = f.fields_for :links do |link|
-      = render 'shared/links_fields', f: link
-    = link_to_add_association 'add link', f, :links, partial: 'shared/links_fields'
+    p Add links:
+    #links
+      = f.fields_for :links do |link|
+        = render 'shared/links_fields', f: link
+      = link_to_add_association 'add link', f, :links, partial: 'shared/links_fields'
 
-  = f.submit 'Submit answer'
+    = f.submit 'Submit answer'

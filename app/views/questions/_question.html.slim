@@ -12,7 +12,7 @@
   = render 'shared/comments', commentable: question
   = render 'shared/comment_form', commentable: question
 
-  - if current_user&.author_of?(question)
+  - if policy(question).edit? && policy(question).destroy?
     = link_to 'Delete question', question_path(question), method: :delete
     | |
     = link_to 'Edit question', '#', class: 'edit-question-link', data: { question_id: question.id }

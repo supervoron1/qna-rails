@@ -35,7 +35,7 @@ RSpec.describe AnswerPolicy, type: :policy do
 
   permissions :destroy? do
     it 'grants access if user is admin' do
-      expect(subject).to permit(User.new(admin:true), create(:answer))
+      expect(subject).to permit(User.new(admin: true), create(:answer))
     end
 
     it 'grants access if user is author' do

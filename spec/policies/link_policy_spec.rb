@@ -9,7 +9,7 @@ RSpec.describe LinkPolicy, type: :policy do
     let(:question) { create(:question) }
 
     it 'grants access if user is admin' do
-      expect(subject).to permit(User.new(admin:true), create(:link, linkable: question))
+      expect(subject).to permit(User.new(admin: true), create(:link, linkable: question))
     end
 
     it 'grants access if user is author of parent resource' do
