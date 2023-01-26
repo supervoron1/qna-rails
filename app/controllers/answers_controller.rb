@@ -43,11 +43,7 @@ class AnswersController < ApplicationController
   end
 
   def mark_as_best
-    if current_user&.author_of?(@answer.question)
-      @answer.mark_as_best!
-    else
-      flash.now[:alert] = 'You must be author of main question'
-    end
+    @answer.mark_as_best!
   end
 
   private

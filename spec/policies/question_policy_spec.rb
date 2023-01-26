@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative 'shared/votable_policy'
 
 RSpec.describe QuestionPolicy, type: :policy do
   let(:user) { User.new }
@@ -18,7 +19,7 @@ RSpec.describe QuestionPolicy, type: :policy do
   end
 
   permissions :new? do
-    it 'grants access if user is exists' do
+    it 'grants access if user exists' do
       expect(subject).to permit(user)
     end
 
@@ -28,7 +29,7 @@ RSpec.describe QuestionPolicy, type: :policy do
   end
 
   permissions :create? do
-    it 'grants access if user is exists' do
+    it 'grants access if user exists' do
       expect(subject).to permit(user)
     end
 
@@ -73,66 +74,18 @@ RSpec.describe QuestionPolicy, type: :policy do
     end
   end
 
-  permissions :like? do
-    let!(:question) { create(:question) }
-    let(:vote) { create(:vote, votable: question, user: user) }
-
-    it 'grants access if user is not author of votable and did\'t vote before' do
-      expect(subject).to permit(user, create(:question))
-    end
-
-    it 'denies access if user is author of votable' do
-      expect(subject).to_not permit(user, create(:question, user: user))
-    end
-
-    it 'denies access if user voted before' do
-      # expect(subject).to_not permit(user, question)
+  permissions :comment? do
+    it 'grants access if user is exists' do
+      expect(subject).to permit(user)
     end
 
     it 'denies access if user is guest' do
-      expect(subject).to_not permit(nil, create(:question))
+      expect(subject).to_not permit(nil)
     end
   end
 
-  permissions :dislike? do
-    let!(:question_with_vote) { create(:question) }
-    let(:vote) { create(:vote, votable: question_with_vote, user: user) }
-
-    it 'grants access if user is not author of votable and did\'t vote before' do
-      expect(subject).to permit(user, create(:question))
-    end
-
-    it 'denies access if user is author of votable' do
-      expect(subject).to_not permit(user, create(:question, user: user))
-    end
-
-    it 'denies access if user voted before' do
-      # expect(subject).to_not permit(user, question_with_vote)
-    end
-
-    it 'denies access if user is guest' do
-      expect(subject).to_not permit(nil, create(:question))
-    end
-  end
-
-  permissions :cancel? do
-    let!(:question_with_vote) { create(:question) }
-    let(:vote) { create(:vote, votable: question_with_vote, user: user) }
-
-    it 'grants access if user voted before' do
-      # expect(subject).to permit(user, question_with_vote)
-    end
-
-    it 'denies access if user is author of votable' do
-      expect(subject).to_not permit(user, create(:question, user: user))
-    end
-
-    it 'denies access if user is not author of votable and did\'t vote before' do
-      expect(subject).to_not permit(user, create(:question))
-    end
-
-    it 'denies access if user is guest' do
-      expect(subject).to_not permit(nil, create(:question))
-    end
+  it_behaves_like 'Votable Policy' do
+    let!(:votable) { create(:question) }
+    let(:factory_name) { :question }
   end
 end

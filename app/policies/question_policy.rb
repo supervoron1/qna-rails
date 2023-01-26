@@ -29,6 +29,10 @@ class QuestionPolicy < ApplicationPolicy
     user&.admin? || user&.author_of?(record)
   end
 
+  def comment?
+    user.present?
+  end
+
   def like?
     user.present? && !user.author_of?(record) && record.votes.pluck(:user_id).exclude?(user.id)
   end

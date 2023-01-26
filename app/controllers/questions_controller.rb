@@ -69,7 +69,6 @@ class QuestionsController < ApplicationController
                                     # locals: { question: @question },
                                     json: @question.title
                                  )
-
   end
 
   def authorize_question

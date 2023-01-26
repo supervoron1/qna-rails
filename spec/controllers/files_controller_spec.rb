@@ -23,7 +23,7 @@ RSpec.describe FilesController, type: :controller do
       let(:not_own_question) { create(:question, :with_file) }
 
       it "doesn't delete someone else's attachment" do
-        expect { delete :destroy, params: { id: not_own_question.files[0].id } }.to_not change(not_onw_question.files, :count)
+        expect { delete :destroy, params: { id: not_own_question.files[0].id } }.to_not change(not_own_question.files, :count)
       end
 
       it 'redirects to question' do

@@ -23,5 +23,5 @@
 
       = f.submit 'Save'
 
-  - if policy(answer).update?
+  - if policy(answer).mark_as_best?
     = link_to 'Mark as best', mark_as_best_answer_path(answer), remote: true, class: 'mark-as-best-answer-link', data: { answer_id: answer.id }, method: :patch
