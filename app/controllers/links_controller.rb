@@ -1,5 +1,4 @@
 class LinksController < ApplicationController
-  before_action :authenticate_user!
   before_action :find_link, only: %i[destroy]
 
   def destroy

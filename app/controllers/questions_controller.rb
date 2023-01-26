@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
   before_action :load_question, only: %i[show update destroy]
-  before_action :authorize_question, only: %i[update destroy]
+  before_action :authorize_question, only: %i[show update destroy]
 
   after_action :publish_question, only: %i[create]
 
@@ -11,6 +11,8 @@ class QuestionsController < ApplicationController
 
   def index
     @questions = Question.all
+
+    authorize @questions
   end
 
   def show
@@ -20,7 +22,6 @@ class QuestionsController < ApplicationController
 
   def new
     @question = Question.new
-    authorize @question
 
     @question.links.new
     @question.build_reward
