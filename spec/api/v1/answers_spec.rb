@@ -149,4 +149,120 @@ describe 'Answers API', type: :request do
       end
     end
   end
+
+  describe 'PATCH /api/v1/answers/{id}' do
+    let(:answer) { create(:answer) }
+    let(:api_path) { "/api/v1/answers/#{answer.id}" }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :patch }
+    end
+
+    context 'authorized' do
+      let(:user) { create(:user) }
+      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
+
+      context 'own answer' do
+        before { answer.update(user_id: user.id) }
+
+        context 'with valid attributes' do
+          before { patch api_path, params:
+            { access_token: access_token.token, answer: { body: 'new body' } }, headers: headers }
+
+          it 'returns 200 status code' do
+            expect(response).to be_successful
+          end
+
+          it 'changes answer attributes' do
+            answer.reload
+
+            expect(answer.body).to eq 'new body'
+          end
+        end
+
+        context 'with invalid attributes' do
+          before { patch api_path, params:
+            { access_token: access_token.token, answer: attributes_for(:answer, :invalid) }, headers: headers }
+
+          it 'returns 400 status code' do
+            expect(response).to have_http_status :bad_request
+          end
+
+          it 'does not change answer' do
+            answer.reload
+
+            expect(answer.body).to eq 'Answer_Body'
+          end
+
+          it 'should contain key errors' do
+            expect(json).to have_key('errors')
+          end
+        end
+      end
+
+      context 'not own answer' do
+        let(:another_user) { create(:user) }
+
+        before do
+          answer.update(user_id: another_user.id)
+
+          patch api_path, params:
+            { access_token: access_token.token, answer: { body: 'new body' } }, headers: headers
+        end
+
+        it 'returns 403 status code' do
+          expect(response).to have_http_status :forbidden
+        end
+
+        it 'does not change question' do
+          answer.reload
+
+          expect(answer.body).to eq 'Answer_Body'
+        end
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/answers/{id}' do
+    let(:answer) { create(:answer) }
+    let(:api_path) { "/api/v1/answers/#{answer.id}" }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :delete }
+    end
+
+    context 'authorized' do
+      let(:user) { create(:user) }
+      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
+
+      context 'own answer' do
+        before { answer.update(user_id: user.id) }
+
+        it 'returns 204 status code' do
+          delete api_path, params: { access_token: access_token.token }, headers: headers
+
+          expect(response).to have_http_status :no_content
+        end
+
+        it 'deletes the answer' do
+          expect { delete api_path, params:
+            { access_token: access_token.token }, headers: headers }.to change(user.answers, :count).by(-1)
+        end
+      end
+
+      context 'no own answer' do
+        it 'returns 403 status code' do
+          delete api_path, params: { access_token: access_token.token }, headers: headers
+
+          expect(response).to have_http_status :forbidden
+        end
+
+        it "does not delete not the own answer" do
+          answer.reload # TODO: for some reason doesn't work without it
+          expect { delete api_path, params:
+            { access_token: access_token.token}, headers: headers }.to_not change(Answer, :count)
+        end
+      end
+    end
+  end
 end
