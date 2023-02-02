@@ -5,23 +5,17 @@ describe 'Profiles API', type: :request do
                     'Accept': 'application/json'} }
 
   describe 'GET /api/v1/profiles/me' do
-    context 'unauthorized' do
-      it 'returns 401 status code if there is no access_token' do
-        get '/api/v1/profiles/me', headers: headers
-        expect(response.status).to eq 401
-      end
+    let(:api_path) { '/api/v1/profiles/me' }
 
-      it 'returns 401 status code if access_token in invalid' do
-        get '/api/v1/profiles/me', params: { access_token: '12345' }, headers: headers
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :get }
     end
 
     context 'authorized' do
       let(:me) { create(:user) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-      before { get '/api/v1/profiles/me', params: { access_token: access_token.token }, headers: headers }
+      before { get api_path, params: { access_token: access_token.token }, headers: headers }
 
       it 'returns 200 status code' do
         expect(response).to be_successful
