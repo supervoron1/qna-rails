@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 describe 'Answers API', type: :request do
-  let(:headers) { { 'Content-Type': 'application/json',
-                    'Accept': 'application/json' } }
+  let(:headers) { { 'Accept': 'application/json' } }
 
   describe 'GET /api/v1/answers/{id}' do
     let!(:answer) { create(:answer, :with_file) }
@@ -92,6 +91,60 @@ describe 'Answers API', type: :request do
           %w[name linkable_type linkable_id].each do |attr|
             expect(link_response).to_not have_key(attr)
           end
+        end
+      end
+    end
+  end
+
+  describe 'POST /api/v1/questions/{id}/answers' do
+    let(:question) { create(:question) }
+    let(:api_path) { "/api/v1/questions/#{question.id}/answers" }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :post }
+    end
+
+    context 'authorized' do
+      let(:user) { create(:user) }
+      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
+
+      context 'with valid attributes' do
+        it 'returns 201 status code' do
+          post api_path, params: { access_token: access_token.token, answer: attributes_for(:answer) }, headers: headers
+
+          expect(response).to have_http_status :created
+        end
+
+        it 'saves a new answer in the database' do
+          expect { post api_path, params: { access_token: access_token.token, answer: attributes_for(:answer) }, headers: headers }.
+            to change(user.answers, :count).by(1)
+        end
+
+        it 'returns fields that was send in parameters' do
+          post api_path, params: { access_token: access_token.token, answer: attributes_for(:answer) }, headers: headers
+
+          %w[body].each do |attr|
+            expect(json['answer'][attr]).to eq attributes_for(:answer)[attr.to_sym]
+          end
+        end
+      end
+
+      context 'with invalid attributes' do
+        it 'returns 400 status code' do
+          post api_path, params: { access_token: access_token.token, answer: attributes_for(:answer, :invalid) }, headers: headers
+
+          expect(response).to have_http_status :bad_request
+        end
+
+        it 'does not save the question' do
+          expect { post api_path, params: { access_token: access_token.token, answer: attributes_for(:answer, :invalid) }, headers: headers }.
+            to_not change(Answer, :count)
+        end
+
+        it 'should contain key errors' do
+          post api_path, params: { access_token: access_token.token, answer: attributes_for(:answer, :invalid) }, headers: headers
+
+          expect(json).to have_key('errors')
         end
       end
     end
