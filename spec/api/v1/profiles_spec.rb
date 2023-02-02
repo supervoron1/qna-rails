@@ -29,7 +29,7 @@ describe 'Profiles API', type: :request do
 
       it 'does not return private fields' do
         %w[password encrypted_password].each do |attr|
-          expect(json).to_not have_key(attr)
+          expect(json['user']).to_not have_key(attr)
         end
       end
     end
@@ -59,7 +59,7 @@ describe 'Profiles API', type: :request do
         expect(json['users'].size).to eq other_users.size
       end
 
-      it 'doesn\'t return auth user' do
+      it 'does not return auth user' do
         # get all users id from json
         users_id = json['users'].map{ |user| user['id'] }
 
@@ -69,6 +69,12 @@ describe 'Profiles API', type: :request do
       it 'returns all public fields' do
         %w[id email created_at updated_at].each do |attr|
           expect(user_response[attr]).to eq user.send(attr).as_json
+        end
+      end
+
+      it 'does not return private fields' do
+        %w[password encrypted_password admin].each do |attr|
+          expect(user_response).to_not have_key(attr)
         end
       end
     end
