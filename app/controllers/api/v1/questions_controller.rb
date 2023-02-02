@@ -11,6 +11,6 @@ class Api::V1::QuestionsController < Api::V1::BaseController
 
   def answers
     @answers = Question.find(params[:id]).answers
-    render json: @answers
+    render json: @answers, each_serializer: AnswersSerializer
   end
 end
