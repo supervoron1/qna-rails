@@ -1,5 +1,5 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
-  before_action :load_question, only: %i[show update]
+  before_action :load_question, only: %i[show update destroy]
 
   skip_before_action :verify_authenticity_token
 
@@ -31,6 +31,13 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     else
       render json: { errors: @question.errors }, status: :bad_request
     end
+  end
+
+  def destroy
+    authorize @question
+
+    @question.destroy
+    head :no_content
   end
 
   def answers

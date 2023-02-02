@@ -292,6 +292,49 @@ describe 'Questions API', type: :request do
     end
   end
 
+  describe 'DELETE /api/v1/questions/{id}' do
+    let(:question) { create(:question) }
+    let(:api_path) { "/api/v1/questions/#{question.id}" }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :delete }
+    end
+
+    context 'authorized' do
+      let(:user) { create(:user) }
+      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
+
+      context 'own question' do
+        before { question.update(user_id: user.id) }
+
+        it 'returns 204 status code' do
+          delete api_path, params: { access_token: access_token.token }, headers: headers
+
+          expect(response).to have_http_status :no_content
+        end
+
+        it 'deletes the question' do
+          expect { delete api_path, params:
+            { access_token: access_token.token }, headers: headers }.to change(user.questions, :count).by(-1)
+        end
+      end
+
+      context 'no own question' do
+        it 'returns 403 status code' do
+          delete api_path, params: { access_token: access_token.token }, headers: headers
+
+          expect(response).to have_http_status :forbidden
+        end
+
+        it "doesn't delete not the own question" do
+          question.reload # TODO: for some reason doesn't work without it
+          expect { delete api_path, params:
+            { access_token: access_token.token}, headers: headers }.to_not change(Question, :count)
+        end
+      end
+    end
+  end
+
   describe 'GET /api/v1/questions/{id}/answers' do
     let!(:question) { create(:question) }
     let!(:answers) { create_list(:answer, 5, question: question) }
