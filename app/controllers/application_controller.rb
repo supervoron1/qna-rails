@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Pundit
+  include Pundit::Authorization
 
   before_action :gon_user, unless: :devise_controller?
 

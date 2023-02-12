@@ -23,7 +23,7 @@ $(document).on('turbolinks:load', function(){
 
             var questionsList = $('.questions-list');
 
-            questionsList.append(data)
+            questionsList.append(data.question)
         }
     })
 });

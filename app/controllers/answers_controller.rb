@@ -13,7 +13,7 @@ class AnswersController < ApplicationController
     @answer = current_user.answers.new(answer_params)
     @answer.question = @question
 
-    authorize_answer
+    authorize @answer
 
     respond_to do |format|
       if @answer.save
