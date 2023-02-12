@@ -5,6 +5,7 @@ class Question < ApplicationRecord
   has_one :reward, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :links, dependent: :destroy, as: :linkable
+  has_many :subscriptions, dependent: :destroy
   belongs_to :user
   belongs_to :best_answer, required: false, class_name: 'Answer', dependent: :destroy, optional: true
 
