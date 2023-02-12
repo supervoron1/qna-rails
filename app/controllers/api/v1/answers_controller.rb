@@ -2,8 +2,6 @@ class Api::V1::AnswersController < Api::V1::BaseController
   before_action :find_question, only: %i[create]
   before_action :set_answer, only: %i[update destroy]
 
-  skip_before_action :verify_authenticity_token
-
   def show
     @answer = Answer.find(params[:id])
     render json: @answer
@@ -11,14 +9,14 @@ class Api::V1::AnswersController < Api::V1::BaseController
 
   def create
     @answer = current_user.answers.new(answer_params)
-    @answer.assign_attributes(question: @question)
+    @answer.question = @question
 
     authorize @answer
 
     if @answer.save
       render json: @answer, status: :created
     else
-      render json: { errors: @answer.errors }, status: :bad_request
+      render json: { errors: @answer.errors }, status: :unprocessable_entity
     end
   end
 
@@ -26,9 +24,10 @@ class Api::V1::AnswersController < Api::V1::BaseController
     authorize @answer
 
     if @answer.update(answer_params)
-      head :ok
+      # head :ok
+      @answer
     else
-      render json: { errors: @answer.errors }, status: :bad_request
+      render json: { errors: @answer.errors }, status: :unprocessable_entity
     end
   end
 
@@ -36,7 +35,8 @@ class Api::V1::AnswersController < Api::V1::BaseController
     authorize @answer
 
     @answer.destroy
-    head :no_content
+    # head :no_content
+    @answer
   end
 
   private

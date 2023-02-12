@@ -91,10 +91,10 @@ describe 'Answers API', type: :request do
       end
 
       context 'with invalid attributes' do
-        it 'returns 400 status code' do
+        it 'returns 422 status code' do
           post api_path, params: { access_token: access_token.token, answer: attributes_for(:answer, :invalid) }, headers: headers
 
-          expect(response).to have_http_status :bad_request
+          expect(response).to have_http_status :unprocessable_entity
         end
 
         it 'does not save the question' do
@@ -145,8 +145,8 @@ describe 'Answers API', type: :request do
           before { patch api_path, params:
             { access_token: access_token.token, answer: attributes_for(:answer, :invalid) }, headers: headers }
 
-          it 'returns 400 status code' do
-            expect(response).to have_http_status :bad_request
+          it 'returns 422 status code' do
+            expect(response).to have_http_status :unprocessable_entity
           end
 
           it 'does not change answer' do
