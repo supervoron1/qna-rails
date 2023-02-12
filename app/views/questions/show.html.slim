@@ -2,7 +2,7 @@
   = render 'shared/errors', resource: @question
 
 p Question
-= render @question, question: @question
+= render @question, question: @question, subscription: @subscription
 
 .answers
   - if @question.answers.present?

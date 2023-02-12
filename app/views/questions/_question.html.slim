@@ -9,6 +9,7 @@
   = render 'shared/files', resource: question if question.files.attached?
   = render 'shared/links', links: question.links if question.links.exists?
   = render 'shared/votes', votable: question
+  = render 'shared/subscribe', question: question, subscription: question.subscriptions.find_by(user: current_user)
   = render 'shared/comments', commentable: question
   = render 'shared/comment_form', commentable: question
 

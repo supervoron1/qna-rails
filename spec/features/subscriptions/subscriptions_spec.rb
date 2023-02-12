@@ -7,37 +7,49 @@ feature 'User can subscribe for question', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given!(:question) { create(:question) }
 
   describe 'Authenticated user', js: true do
-    before do
-      sign_in(user)
+    before { sign_in(user) }
 
-      visit question_path(question)
+    context 'author of question' do
+      before { visit new_question_path }
+
+      scenario 'subscribe for question after create' do
+        fill_in 'Title', with: 'Test question'
+        fill_in 'Body', with: 'text text text?'
+        click_on 'Ask'
+
+        within '.question' do
+          expect(page).to_not have_link 'Subscribe to new answers'
+          expect(page).to have_link 'Unsubscribe'
+        end
+      end
     end
 
-    scenario 'subscribe for question' do
-      within '.question' do
-        click_on 'Subscribe for answers'
+    context 'not author of question' do
+      scenario 'subscribe for question' do
+        visit question_path(question)
 
-        expect(page).to_not have_link 'Subscribe for answers'
-        expect(page).to have_link 'Unsubscribe'
+        within '.question' do
+          click_on 'Subscribe to new answers'
+
+          expect(page).to_not have_link 'Subscribe for answers'
+          expect(page).to have_link 'Unsubscribe'
+        end
       end
 
-      expect(page).to have_text('You have successfully subscribed for new answers')
+      scenario 'unsubscribe from question' do
+        Subscription.create(question: question, user: user)
+        visit question_path(question)
 
-    end
+        within '.question' do
+          click_on 'Unsubscribe'
 
-    scenario 'unsubscribe from question' do
-      let(:subscription) { create(:subscribtion, question: question, user: user) }
-      within '.question' do
-        click_on 'Unsubscribe'
-
-        expect(page).to have_link 'Subscribe for answers'
-        expect(page).to_not have_link 'Unsubscribe'
+          expect(page).to have_link 'Subscribe to new answers'
+          expect(page).to_not have_link 'Unsubscribe'
+        end
       end
-
-      expect(page).to have_text('You have unsubscribed from this question')
     end
   end
 
@@ -46,7 +58,8 @@ feature 'User can subscribe for question', %q{
       visit question_path(question)
 
       within '.question' do
-        expect(page).to_not have_link 'Subscribe for answers'
+        expect(page).to_not have_link 'Subscribe to new answers'
+        expect(page).to_not have_link 'Unsubscribe'
       end
     end
   end

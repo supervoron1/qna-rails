@@ -32,6 +32,7 @@ class QuestionsController < ApplicationController
     authorize @question
 
     if @question.save
+      @question.subscriptions.create(user: current_user)
       redirect_to @question, notice: 'Your question successfully created.'
     else
       render :new
