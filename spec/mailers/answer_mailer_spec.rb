@@ -1,14 +1,15 @@
 require "rails_helper"
 
 RSpec.describe AnswerMailer, type: :mailer do
-  describe "digest" do
+  describe "new_answer" do
     let(:user) { create(:user) }
-    let!(:question) { create(:question, user: user) }
+    let(:question) { create(:question, user: user) }
+    let!(:subscription) { create(:subscription, user: user, question: question) }
     let(:answer) { create(:answer, question: question) }
-    let(:mail) { AnswerMailer.new_answer(answer) }
+    let(:mail) { AnswerMailer.new_answer(answer, user) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("You have new answer on your question")
+      expect(mail.subject).to eq("You have new answer on subscribed question")
       expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(["from@example.com"])
     end

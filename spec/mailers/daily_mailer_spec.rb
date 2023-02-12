@@ -13,7 +13,7 @@ RSpec.describe DailyMailer, type: :mailer do
       expect(mail.from).to eq(["from@example.com"])
     end
 
-    it "renders the body with today's questions" do
+    it "renders the body with today questions" do
       expect(mail.body.encoded).to match("Today created questions digest")
 
       questions.each do |question|
@@ -25,5 +25,4 @@ RSpec.describe DailyMailer, type: :mailer do
       expect(mail.body.encoded).to_not match(old_question.title)
     end
   end
-
 end
