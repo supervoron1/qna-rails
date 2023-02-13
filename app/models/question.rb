@@ -5,6 +5,7 @@ class Question < ApplicationRecord
   has_one :reward, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :links, dependent: :destroy, as: :linkable
+  has_many :subscriptions, dependent: :destroy
   belongs_to :user
   belongs_to :best_answer, required: false, class_name: 'Answer', dependent: :destroy, optional: true
 
@@ -15,7 +16,15 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
+  after_create :calculate_reputation
+
   def not_best_answers
     self.answers.where.not(id: self.best_answer_id)
+  end
+
+  private
+
+  def calculate_reputation
+    ReputationJob.perform_later(self)
   end
 end

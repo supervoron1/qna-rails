@@ -1,0 +1,9 @@
+.subscription
+  - if current_user
+    - if subscription.nil? || policy(subscription).create?
+      = link_to 'Subscribe to new answers', question_subscriptions_path(question), method: :post, remote: true,
+              data: { type: :js }, class: 'subscribe-button'
+
+    - if !subscription.nil? && policy(subscription).destroy?
+      = link_to 'Unsubscribe', subscription_path(subscription), method: :delete, remote: true,
+              data: { type: :js }, class: 'unsubscribe-button'
