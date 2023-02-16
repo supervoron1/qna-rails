@@ -38,5 +38,7 @@ yarn-debug.log*
 
 /config/database.yml
 /config/credentials.yml.enc
+/config/*.sphinx.conf
+/db/sphinx
 .idea
 .DS_Store

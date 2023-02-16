@@ -1,0 +1,37 @@
+=form_tag '/search', method: :get do
+  p
+    =text_field_tag 'q', @query
+    =submit_tag 'Find'
+  p
+    =radio_button_tag(:scope, 'all', @scope == 'all')
+    =label_tag(:scope_all, 'All')
+
+    =radio_button_tag(:scope, 'questions', @scope == 'questions')
+    =label_tag(:scope_questions, 'Questions')
+
+    =radio_button_tag(:scope, 'answers', @scope == 'answers')
+    =label_tag(:scope_answers, 'Answers')
+
+    =radio_button_tag(:scope, 'comments', @scope == 'comments')
+    =label_tag(:scope_comments, 'Comments')
+
+    =radio_button_tag(:scope, 'users', @scope == 'users')
+    =label_tag(:scope_users, 'Users')
+
+.result
+  -if @result&.any?
+    p
+      |Here is what we found:
+    -@result.each do |item|
+      = render partial: "#{item.class.to_s.underscore.pluralize}/search_item", locals: { resource: item }
+
+    -if @result.current_page > 1
+      =link_to 'Prev', search_path(q: @query, scope: @scope, page: @result.current_page - 1)
+
+    -if @result.total_pages > @result.current_page
+      =link_to 'Next', search_path(q: @query, scope: @scope, page: @result.current_page + 1)
+
+
+  -if @result&.empty?
+    p
+      |No matches were found
