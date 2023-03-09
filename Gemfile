@@ -61,7 +61,7 @@ gem 'active_model_serializers', '~> 0.10'
 gem 'oj'
 
 # For queues
-gem 'sidekiq'
+gem 'sidekiq', '~> 6.5'
 gem 'sinatra', require: false
 gem 'whenever', require: false
 
