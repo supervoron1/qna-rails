@@ -5,12 +5,13 @@
         th Question title
         th Actions
       tbody
-        - @questions.each do |question|
-          tr
-            td
-              = question.title
-            td
-              = link_to 'Show', question_path(question)
+        - cache collection_cache_key_for :question do
+          - @questions.each do |question|
+            tr
+              td
+                = question.title
+              td
+                = link_to 'Show', question_path(question)
 - else
   .no_questions There are no any questions. Let's create first
 
