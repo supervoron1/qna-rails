@@ -2,7 +2,7 @@ class Answer < ApplicationRecord
   include Votable
   include Commentable
 
-  belongs_to :question
+  belongs_to :question, touch: true
   belongs_to :user
   has_one :reward, dependent: :destroy
   has_one :question_with_best_answer, class_name: 'Question', foreign_key: :best_answer_id, dependent: :nullify
